@@ -1,0 +1,29 @@
+#+ summary: Chemicals identifiers
+#+ description: Chemicals identifiers
+#+ endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+#+ pagination: 100
+#+ method: GET
+#+ tags:
+#+   - Chemicals
+
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
+#title:Discover mostly used external IDs for items with an InChIKey (P235)
+SELECT ?p ?propLabel (COUNT(?item) AS ?count) WHERE {
+    SERVICE bd:sample {
+        ?item p:P235 [].
+        bd:serviceParam bd:sample.limit 10000 .
+    }
+    hint:Prior hint:runFirst TRUE.
+    ?item ?p [].
+    hint:Prior hint:rangeSafe TRUE.
+    ?prop wikibase:directClaim ?p.
+    hint:Prior hint:rangeSafe TRUE.
+    ?prop wikibase:propertyType wikibase:ExternalId.
+    hint:Prior hint:rangeSafe TRUE.
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}
+GROUP BY ?p ?propLabel
+ORDER BY DESC (?count)

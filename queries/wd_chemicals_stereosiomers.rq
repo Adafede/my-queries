@@ -1,0 +1,14 @@
+#+ summary: Which compounds have more than 30 stereoisomers?
+#+ description: Which compounds have more than 30 stereoisomers?
+#+ endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+#+ pagination: 100
+#+ method: GET
+#+ tags:
+#+   - Chemicals
+
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+#title: Which compounds have more than 30 stereoisomers?
+SELECT ?s (COUNT(?o) AS ?count) WHERE { ?s wdt:P3364 ?o. }
+GROUP BY ?s
+HAVING (?count > 30)
+ORDER BY DESC(?count)

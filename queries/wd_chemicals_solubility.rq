@@ -1,0 +1,29 @@
+#+ summary: Chemicals solubility
+#+ description: Chemicals solubility
+#+ endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+#+ pagination: 100
+#+ method: GET
+#+ tags:
+#+   - Chemicals
+
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX psv: <http://www.wikidata.org/prop/statement/value/>
+PREFIX pqv: <http://www.wikidata.org/prop/qualifier/value/>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+#title: Chemicals with solubility, solvent, temperature and their units.
+SELECT ?item ?inchikey ?solubility ?solvent ?solventLabel ?temperature ?unit_temperature ?unit_temperatureLabel ?unit_solubility ?unit_solubilityLabel WHERE {
+    ?item wdt:P235 ?inchikey.
+    ?item p:P2177 ?statement.
+    ?statement ps:P2177 ?solubility.
+    ?statement pq:P2178 ?solvent.
+    OPTIONAL {
+        ?statement pq:P2076 ?temperature.
+        ?statement pqv:P2076/wikibase:quantityUnit ?unit_temperature.
+    }
+    ?statement psv:P2177/wikibase:quantityUnit ?unit_solubility.
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}

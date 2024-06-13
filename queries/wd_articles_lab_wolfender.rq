@@ -1,0 +1,54 @@
+#+ summary: Scholarly articles from Wolfender's lab
+#+ description: Scholarly articles from Wolfender's lab
+#+ endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+#+ pagination: 100
+#+ method: GET
+#+ tags:
+#+   - Scholarly articles
+
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
+#title: Scholarly articles from Wolfender's lab
+SELECT DISTINCT (MIN(?dates) AS ?date) ?title ?journal ?doi ?work (GROUP_CONCAT(DISTINCT ?authorLabel; SEPARATOR = ", ") AS ?authors) WHERE {
+    SELECT DISTINCT ?authorLabel ?order ?dates ?title ?journal ?doi ?work WHERE {
+        {
+            SELECT DISTINCT ?work ?author_statement ?dates ?doi ?journal ?title WHERE {
+                {
+                    SELECT DISTINCT ?work ?datetimes WHERE {
+                        ?work wdt:P50 wd:Q56084663;                         # Jean-Luc Wolfender
+                        wdt:P577 ?datetimes.
+                        FILTER((YEAR(?datetimes)) >= ((YEAR(NOW())) - 20 )) # last 20 years
+                    }
+                }
+                hint:Prior hint:runFirst TRUE.
+                ?work wdt:P1433 ?journal_;
+                wdt:P356 ?doi;
+                p:P50 ?author_statement.
+                BIND(xsd:date(?datetimes) AS ?dates)
+                SERVICE wikibase:label {
+                    bd:serviceParam wikibase:language "en".
+                    ?journal_ rdfs:label ?journal.
+                    ?work rdfs:label ?title.
+                }
+            }
+        }
+        hint:Prior hint:runFirst TRUE.
+        ?author_statement ps:P50 ?author;
+        pq:P1545 ?order_.
+        BIND(xsd:integer(?order_) AS ?order)
+        SERVICE wikibase:label {
+            bd:serviceParam wikibase:language "en".
+            ?author rdfs:label ?authorLabel.
+        }
+    }
+    ORDER BY (?order)
+}
+GROUP BY ?title ?journal ?doi ?work
+ORDER BY DESC (?date)

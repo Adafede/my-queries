@@ -1,0 +1,22 @@
+#+ summary: Chemicals melting point
+#+ description: Chemicals melting point
+#+ endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+#+ pagination: 100
+#+ method: GET
+#+ tags:
+#+   - Chemicals
+
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX psv: <http://www.wikidata.org/prop/statement/value/>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+#title: Chemicals with melting point and their units.
+SELECT ?item ?inchikey ?melting_point ?unit ?unitLabel WHERE {
+    ?item wdt:P235 ?inchikey.
+    ?item p:P2101 ?statement.
+    ?statement ps:P2101 ?melting_point.
+    ?statement psv:P2101/wikibase:quantityUnit ?unit.
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}

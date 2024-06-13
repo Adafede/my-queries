@@ -1,0 +1,88 @@
+#+ summary: Author's topic of expertise
+#+ description: Author's topic of expertise
+#+ endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+#+ pagination: 100
+#+ method: GET
+#+ tags:
+#+   - Authors
+
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
+#defaultView:BubbleChart
+PREFIX target: <http://www.wikidata.org/entity/Q97455964>
+SELECT ?score ?topic ?topicLabel WHERE {
+    {
+        SELECT (SUM(?score_) AS ?score) ?topic
+        WHERE {
+            {
+                SELECT (64 AS ?score_) ?topic WHERE {
+                    target: wdt:P101 ?topic .
+                }
+            }
+            UNION
+            {
+                SELECT (16 AS ?score_) ?topic WHERE {
+                    target: wdt:P101/wdt:P279 ?topic .
+                }
+            }
+            UNION
+            {
+                SELECT (4 AS ?score_) ?topic WHERE {
+                    target: wdt:P101/wdt:P279/wdt:P279 ?topic .
+                }
+            }
+            UNION
+            {
+                SELECT (32 AS ?score_) ?topic WHERE {
+                    ?work wdt:P50 target: ;
+                    wdt:P921 ?topic .
+                }
+            }
+            UNION
+            {
+                SELECT (8 AS ?score_) ?topic WHERE {
+                    ?work wdt:P50 target: ;
+                    wdt:P921/wdt:P279 ?topic .
+                }
+            }
+            UNION
+            {
+                SELECT (2 AS ?score_) ?topic WHERE {
+                    ?work wdt:P50 target: ;
+                    wdt:P921/wdt:P279/wdt:P279 ?topic .
+                }
+            }
+            UNION
+            {
+                SELECT (8 AS ?score_) ?topic WHERE {
+                    ?work wdt:P50 target: .
+                    ?citing_work wdt:P2860 ?work ;
+                    wdt:P921 ?topic .
+                }
+            }
+            UNION
+            {
+                SELECT (4 AS ?score_) ?topic WHERE {
+                    ?work wdt:P50 target: .
+                    ?citing_work wdt:P2860 ?work ;
+                    wdt:P921/wdt:P279 ?topic .
+                }
+            }
+            UNION
+            {
+                SELECT (1 AS ?score_) ?topic WHERE {
+                    ?work wdt:P50 target: .
+                    ?citing_work wdt:P2860 ?work ;
+                    wdt:P921/wdt:P279/wdt:P279 ?topic .
+                }
+            }
+            hint:Prior hint:rangeSafe TRUE.
+        }
+        GROUP BY ?topic
+    }
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}
+ORDER BY DESC(?score)
+LIMIT 15

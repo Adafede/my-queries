@@ -1,0 +1,25 @@
+#+ summary: Scholarly articles containing 'quassin' (Q2079986) in title
+#+ description: Scholarly articles containing 'quassin' (Q2079986) in title
+#+ endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+#+ pagination: 100
+#+ method: GET
+#+ tags:
+#+   - Scholarly articles
+
+PREFIX mwapi: <https://www.mediawiki.org/ontology#API/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+#title: Scholarly articles containing 'quassin' (Q2079986) in title
+SELECT ?article ?article_title WHERE {
+    SERVICE wikibase:mwapi {
+        bd:serviceParam wikibase:endpoint "www.wikidata.org";
+        wikibase:api "Search";
+        mwapi:srsearch "quassin haswbstatement:P31=Q13442814 -haswbstatement:P921=Q2079986";
+        mwapi:srlimit "max".
+        ?article wikibase:apiOutputItem mwapi:title.
+    }
+    ?article wdt:P1476 ?article_title.
+    FILTER(CONTAINS(LCASE(STR(?article_title)), "quassin"))
+}

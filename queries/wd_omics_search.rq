@@ -1,0 +1,58 @@
+#+ summary: Which taxa have children (or themselves) with known chemicals, genes, and proteins?
+#+ description: Which taxa have children (or themselves) with known chemicals, genes, and proteins?
+#+ endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+#+ pagination: 100
+#+ method: GET
+#+ tags:
+#+   - Omics
+
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
+#title: Which taxa have children (or themselves) with known chemicals, genes, and proteins? (search)
+SELECT ?taxon ?child (COUNT(DISTINCT ?g) AS ?genome) (COUNT(DISTINCT ?m) AS ?metabolome) (COUNT(DISTINCT ?p) AS ?proteome) WHERE {
+    {
+        SELECT ?taxon ?child ?thing WHERE {
+            VALUES ?taxon {
+                wd:Q31856
+            }
+            ?taxon ^(wdt:P171*) ?child.
+            hint:Prior hint:rangeSafe TRUE.
+            ?child ^wdt:P703 ?thing.
+            hint:Prior hint:rangeSafe TRUE.
+        }
+    }
+    {
+        SELECT * WHERE {
+            VALUES ?chemical {
+                wd:Q113145171
+                wd:Q59199015
+            }
+            VALUES ?gene {
+                wd:Q7187
+            }
+            VALUES ?protein {
+                wd:Q8054
+            }
+            {
+                ?thing wdt:P31 ?chemical.
+                hint:Prior hint:rangeSafe TRUE.
+                BIND(?thing AS ?m)
+            }
+            UNION
+            {
+                ?thing wdt:P31 ?protein.
+                hint:Prior hint:rangeSafe TRUE.
+                BIND(?thing AS ?p)
+            }
+            UNION
+            {
+                ?thing wdt:P31 ?gene.
+                hint:Prior hint:rangeSafe TRUE.
+                BIND(?thing AS ?g)
+            }
+        }
+    }
+}
+GROUP BY ?taxon ?child
+HAVING (((?genome > 0 ) || (?metabolome > 0 )) || (?proteome > 0 ))

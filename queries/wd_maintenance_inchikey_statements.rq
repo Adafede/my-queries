@@ -1,0 +1,28 @@
+#+ summary: Maintenance inchikey statements
+#+ description: Statements no longer valid because (none of) the InChIKey(s) of the item does not correspond to the InChIKey matched for the reference.
+#+ endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+#+ pagination: 100
+#+ method: GET
+#+ tags:
+#+   - Maintenance
+
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX pr: <http://www.wikidata.org/prop/reference/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
+#title: Statements no longer valid because (none of) the InChIKey(s) of the item does not correspond to the InChIKey matched for the reference.
+SELECT ?item ?statement ?inchikey_item ?inchikey_ref WHERE {
+    {
+        SELECT ?item ?statement (GROUP_CONCAT(?ii; SEPARATOR = " ") AS ?inchikey_item) ?inchikey_ref WHERE {
+            ?statement (prov:wasDerivedFrom/pr:P235) ?inchikey_ref.
+            hint:Prior hint:rangeSafe TRUE.
+            ?item ?p ?statement.
+            hint:Prior hint:rangeSafe TRUE.
+            ?item wdt:P235 ?ii.
+            hint:Prior hint:rangeSafe TRUE.
+        }
+        GROUP BY ?item ?statement ?inchikey_ref
+    }
+    FILTER (?inchikey_item != ?inchikey_ref)
+    FILTER (!REGEX(?inchikey_item, ?inchikey_ref))
+}

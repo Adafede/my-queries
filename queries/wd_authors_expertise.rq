@@ -1,0 +1,32 @@
+#+ summary: Authors (females) with expertise in proteomics and computational biology
+#+ description: Authors (females) with expertise in proteomics and computational biology
+#+ endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+#+ pagination: 100
+#+ method: GET
+#+ tags:
+#+   - Authors
+
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+#title: Authors (females (Q6581072)) with expertise in proteomics (Q471857) and computational biology (Q177005)
+SELECT ?author ?authorLabel ?works ?awards WHERE {
+    {
+        SELECT DISTINCT ?author ?authorLabel (COUNT(DISTINCT ?output) AS ?works) (COUNT(DISTINCT ?award) AS ?awards) WHERE {
+            {
+                SELECT DISTINCT * WHERE {
+                    { ?author (^wdt:P50/wdt:P921) wd:Q471857, wd:Q177005. }
+                    UNION
+                    { ?author wdt:P101 wd:Q471857, wd:Q177005.}
+                    ?author wdt:P21 wd:Q6581072;
+                    rdfs:label ?authorLabel.
+                    FILTER((LANG(?authorLabel)) = "en")
+                }
+            }
+            OPTIONAL { ?author wdt:P166 ?award. }
+            OPTIONAL { ?author ^wdt:P50 ?output. }
+        }
+        GROUP BY ?author ?authorLabel
+    }
+}
+ORDER BY DESC (?works) DESC (?awards) DESC (?count)
