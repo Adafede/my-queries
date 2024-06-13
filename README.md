@@ -1,7 +1,7 @@
-# sparql
+# my-queries
 
-A repository for sparql queries.
+A repository storing my sparql queries.
 
 At the moment, this repository is not organized.
 
-It is just to keep track of sparql generated in the frame of different projects.
+It is just to keep track of sparql queries generated in the frame of different projects.
