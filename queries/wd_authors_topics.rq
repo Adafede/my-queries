@@ -82,7 +82,7 @@ SELECT ?score ?topic ?topicLabel WHERE {
         }
         GROUP BY ?topic
     }
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],mul,en". }
 }
 ORDER BY DESC(?score)
 LIMIT 15

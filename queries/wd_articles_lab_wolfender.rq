@@ -33,7 +33,7 @@ SELECT DISTINCT (MIN(?dates) AS ?date) ?title ?journal ?doi ?work (GROUP_CONCAT(
                 p:P50 ?author_statement.
                 BIND(xsd:date(?datetimes) AS ?dates)
                 SERVICE wikibase:label {
-                    bd:serviceParam wikibase:language "en".
+                    bd:serviceParam wikibase:language "[AUTO_LANGUAGE],mul,en".
                     ?journal_ rdfs:label ?journal.
                     ?work rdfs:label ?title.
                 }
@@ -44,7 +44,7 @@ SELECT DISTINCT (MIN(?dates) AS ?date) ?title ?journal ?doi ?work (GROUP_CONCAT(
         pq:P1545 ?order_.
         BIND(xsd:integer(?order_) AS ?order)
         SERVICE wikibase:label {
-            bd:serviceParam wikibase:language "en".
+            bd:serviceParam wikibase:language "[AUTO_LANGUAGE],mul,en".
             ?author rdfs:label ?authorLabel.
         }
     }

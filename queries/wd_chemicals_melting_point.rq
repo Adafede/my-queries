@@ -18,5 +18,5 @@ SELECT ?item ?inchikey ?melting_point ?unit ?unitLabel WHERE {
     ?item p:P2101 ?statement.
     ?statement ps:P2101 ?melting_point.
     ?statement psv:P2101/wikibase:quantityUnit ?unit.
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],mul,en". }
 }

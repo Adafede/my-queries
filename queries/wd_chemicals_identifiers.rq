@@ -23,7 +23,7 @@ SELECT ?p ?propLabel (COUNT(?item) AS ?count) WHERE {
     hint:Prior hint:rangeSafe TRUE.
     ?prop wikibase:propertyType wikibase:ExternalId.
     hint:Prior hint:rangeSafe TRUE.
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],mul,en". }
 }
 GROUP BY ?p ?propLabel
 ORDER BY DESC (?count)

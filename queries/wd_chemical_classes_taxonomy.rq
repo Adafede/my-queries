@@ -27,5 +27,5 @@ SELECT * WHERE {
     }
     ?class wdt:P31 ?instance. hint:Prior hint:runFirst TRUE.
     OPTIONAL { ?class wdt:P279 ?parent. }
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],mul,en". }
 }

@@ -25,5 +25,5 @@ SELECT ?item ?inchikey ?solubility ?solvent ?solventLabel ?temperature ?unit_tem
         ?statement pqv:P2076/wikibase:quantityUnit ?unit_temperature.
     }
     ?statement psv:P2177/wikibase:quantityUnit ?unit_solubility.
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],mul,en". }
 }
