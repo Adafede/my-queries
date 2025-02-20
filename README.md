@@ -1,7 +1,7 @@
 # my-queries
 
-A repository storing my sparql queries.
+A repository for storing my SPARQL queries.
 
-At the moment, this repository is not organized.
+Currently, this repository is unorganized and serves as a place to track SPARQL queries created for various projects.
 
-It is just to keep track of sparql queries generated in the frame of different projects.
+This repository has now been superseded by: <https://github.com/Adafede/sparql-examples>
