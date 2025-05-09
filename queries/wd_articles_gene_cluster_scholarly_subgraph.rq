@@ -23,8 +23,10 @@ SELECT DISTINCT ?article ?article_doi ?article_title WHERE {
         mwapi:srlimit "max".
         ?article wikibase:apiOutputItem mwapi:title.
     }
-    ?article wdt:P356 ?article_doi.
-    ?article wdt:P1476 ?article_title.
+    SERVICE <https://query-scholarly.wikidata.org/sparql> {
+      ?article wdt:P356 ?article_doi.
+      ?article wdt:P1476 ?article_title.
+    }
     ?s (p:P703/prov:wasDerivedFrom/pr:P248) ?article. hint:Prior hint:rangeSafe TRUE.
     ?s p:P235 [].
 }
