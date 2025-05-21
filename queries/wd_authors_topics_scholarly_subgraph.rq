@@ -122,4 +122,4 @@ SELECT ?score ?topic ?topicLabel WHERE {
   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],mul,en". }
 }
 ORDER BY DESC (?score)
-LIMIT 24
+LIMIT 36
