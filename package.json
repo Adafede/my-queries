@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/jvfe/sparql_portfolio#readme",
   "dependencies": {
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^5.0.0",
     "ejs": "^6.0.0"
   },
   "devDependencies": {}
